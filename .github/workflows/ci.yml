@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - run: cargo run -q -- --config soroban-guard.example.toml --explain SG001 >/dev/null
+
+  # Manual: full benchmark on production contracts (about 2 minutes).
+  benchmark:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release
+      - run: python3 benchmarks/run.py --linter target/release/soroban-linter --cache /tmp/sg-corpus | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # Self-check: the vulnerable fixture must keep failing, the safe one must stay clean.
+  lint-fixtures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo run -q -p soroban-linter -- crates/soroban-linter/tests/fixtures/safe_contract.rs
+      - run: |
+          if cargo run -q -p soroban-linter -- crates/soroban-linter/tests/fixtures/vulnerable_contract.rs; then
+            echo "expected findings in vulnerable_contract.rs" && exit 1
+          fi
+      - run: cargo run -q -p soroban-linter -- crates/soroban-linter/tests/fixtures/vulnerable_contract.rs --format sarif --fail-on never -o report.sarif
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fixture-sarif
+          path: report.sarif
