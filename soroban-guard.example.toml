@@ -1,0 +1,27 @@
+# Copy to `soroban-guard.toml` in the directory you run soroban-linter from,
+# or pass `--config path/to/file.toml`. Command-line flags override these values.
+
+# Per-transaction limits used by SG003 (Stellar mainnet values, protocol 29).
+# Check your network with `stellar network settings`.
+max-footprint-entries = 400
+max-write-entries = 200
+
+# Extra words that mark a storage key as critical state (added to the defaults).
+critical-keywords = ["vault", "shares"]
+
+# Rules to turn off, by id or name.
+disable = []
+
+# Fail on findings at/above this severity: "error", "warning", "note" or "never".
+fail-on = "warning"
+
+# Accepted findings (see `--write-baseline`); only new findings are reported.
+# baseline = "soroban-linter-baseline.json"
+
+# Lint tests/ directories and test.rs files too.
+include-tests = false
+
+# Per-rule severity overrides.
+[severity]
+SG005 = "error"
+storage-get-unwrap = "warning"
