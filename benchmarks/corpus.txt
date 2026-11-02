@@ -1,0 +1,6 @@
+# name                url                                                   commit
+soroban-examples      https://github.com/stellar/soroban-examples           03d42aa6b973dcf3a453a99d0c6a6e8d25a196e2
+blend-contracts       https://github.com/blend-capital/blend-contracts      895845ff0afb36f4a47d88a139da060d56c6592a
+soroswap-core         https://github.com/soroswap/core                      6eade008ee6794075ad941609e0fef0d1124d3eb
+soroban-governor      https://github.com/script3/soroban-governor           a2ac6de81055be5bd13e31f922c9546309bfdb8a
+oz-stellar-contracts  https://github.com/OpenZeppelin/stellar-contracts     ddc327eb92d63709436da3a8455f641c2d5476c5
