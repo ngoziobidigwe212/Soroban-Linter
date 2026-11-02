@@ -1,0 +1,10 @@
+[workspace]
+resolver = "2"
+members = ["contract"]
+
+[workspace.dependencies]
+soroban-sdk = "23"
+
+[profile.release]
+opt-level = "z"
+overflow-checks = false

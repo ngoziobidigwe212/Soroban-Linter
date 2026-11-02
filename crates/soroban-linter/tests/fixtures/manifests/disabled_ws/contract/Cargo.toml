@@ -1,0 +1,12 @@
+[package]
+name = "ws-contract"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+# Profiles here would be ignored by Cargo; the workspace root's apply.
