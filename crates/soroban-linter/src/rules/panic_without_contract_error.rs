@@ -8,8 +8,9 @@ static INFO: RuleInfo = RuleInfo {
     name: "panic-without-contract-error",
     default_severity: Severity::Note,
     summary: "Contract code can abort with an opaque panic instead of a contract error",
-    help: "Handle `Option` / `Result` explicitly or use `panic_with_error!(&env, Error::X)` with a \
-           `#[contracterror]` enum so callers can distinguish failures.",
+    help:
+        "Handle `Option` / `Result` explicitly or use `panic_with_error!(&env, Error::X)` with a \
+         `#[contracterror]` enum so callers can distinguish failures.",
 };
 
 impl Rule for PanicWithoutContractError {

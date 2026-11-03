@@ -749,7 +749,7 @@ impl<'ast> Visit<'ast> for Scanner {
             self.facts.opaque_abort = true;
         }
         for expr in macro_exprs(mac) {
-            self.visit_expr(&expr);
+            Visit::visit_expr(self, &expr);
         }
     }
 
@@ -787,12 +787,6 @@ impl<'ast> Visit<'ast> for Scanner {
             self.facts.callees.push(name);
         }
         visit::visit_expr_call(self, c);
-    }
-
-    fn visit_macro(&mut self, mac: &'ast Macro) {
-        for e in macro_exprs(mac) {
-            Visit::visit_expr(self, &e);
-        }
     }
 }
 
