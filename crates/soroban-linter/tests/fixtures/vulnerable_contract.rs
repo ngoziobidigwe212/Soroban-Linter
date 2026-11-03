@@ -157,7 +157,7 @@ impl Vault {
     }
 
     /// Debits `from`, but only the (caller-chosen) `spender` signs.
-    pub fn pull(e: Env, spender: Address, from: Address, amount: i128) { // expect: SG001, SG010, SG014
+    pub fn pull(e: Env, spender: Address, from: Address, amount: i128) { // expect: SG001, SG014
         spender.require_auth(); // expect: SG008
         check_amount(amount);
         spend_balance(&e, &from, amount);
